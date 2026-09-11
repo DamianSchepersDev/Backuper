@@ -179,9 +179,12 @@ def main():
 
     for server in config["servers"]:
         for backup_config in server["backups"]:
-            backup(server, backup_config, webhook_url)
-
             schedule = backup_config["schedule"]
+
+            job_id = (
+                f"{server['name']}-"
+                f"{backup_config['remote_source']}"
+            )
 
             scheduler.add_job(
                 backup,
@@ -189,7 +192,8 @@ def main():
                 hour=schedule["hour"],
                 minute=schedule["minute"],
                 args=[server, backup_config, webhook_url],
-                id=f"{server['name']}-{backup_config['remote_source']}",
+                id=job_id,
+                replace_existing=True,
             )
 
             logger.info(
@@ -206,6 +210,7 @@ def main():
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown(wait=True)
         logger.info("Scheduler stopped.")
+
 
 
 if __name__ == "__main__":
