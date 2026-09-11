@@ -1,0 +1,22 @@
+[project]
+name = "backuper"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "tech08mag", email = "tech08mag@proton.me" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "apscheduler>=3.11.3",
+]
+
+[project.scripts]
+backuper = "backuper:main"
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+package = false

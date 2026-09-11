@@ -1,0 +1,20 @@
+{
+  "servers": [
+    {
+      "name": "",
+      "user": "",
+      "host": "",
+      "port": 22,
+      "backups": [
+        {
+          "remote_source": "",
+          "destination": "",
+          "schedule": {
+            "hour": 2,
+            "minute": 0
+          }
+        }
+      ]
+    }
+  ]
+}
