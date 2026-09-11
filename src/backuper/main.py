@@ -49,15 +49,30 @@ def notify_discord(webhook_url, title, description, color):
 
     request = Request(
         webhook_url,
-        data=json.dumps(payload).encode(),
-        headers={"Content-Type": "application/json"},
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Backuper/1.0",
+        },
         method="POST",
     )
 
     try:
-        with urlopen(request, timeout=DISCORD_TIMEOUT):
-            pass
-    except (HTTPError, URLError, TimeoutError, OSError) as error:
+        with urlopen(request, timeout=DISCORD_TIMEOUT) as response:
+            logger.info(
+                "Discord notification sent successfully: HTTP %s",
+                response.status,
+            )
+
+    except HTTPError as error:
+        body = error.read().decode("utf-8", errors="replace")
+        logger.error(
+            "Discord notification failed: HTTP %s: %s",
+            error.code,
+            body,
+        )
+
+    except (URLError, TimeoutError, OSError) as error:
         logger.error("Discord notification failed: %s", error)
 
 
